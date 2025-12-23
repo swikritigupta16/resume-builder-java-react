@@ -9,27 +9,53 @@ function ModernTemplate({ resume }) {
         {resume.email} | {resume.phone}
       </p>
 
+      {/*Summary*/}
       {resume.summary && (
         <>
           <h5 className="mt-4 text-primary">Summary</h5>
           <p>{resume.summary}</p>
         </>
       )}
+        
+      {/*Education */}
+      {resume.education?.some(
+      edu =>
+        edu.degree ||
+        edu.institute ||
+        edu.year
+) && (
+  <>
+    <h5 className="mt-3">Education</h5>
+    {resume.education.map((edu, index) => (
+      <div key={index} className="mb-2">
+        <strong>{edu.degree}</strong><br />
+        {edu.institute} | {edu.year}
+      </div>
+    ))}
+  </>
+)}
 
-      {resume.education && (
-        <>
-          <h5 className="mt-4 text-primary">Education</h5>
-          <p>{resume.education}</p>
-        </>
-      )}
+     {/*Experience */}
+    {resume.experience?.some(
+      exp =>
+        exp.company ||
+        exp.role ||
+        exp.duration ||
+        exp.description
+) && (   
+  <>
+    <h5 className="mt-3">Experience</h5>
+    {resume.experience.map((exp, index) => (
+      <div key={index} className="mb-3">
+        <strong>{exp.role}</strong> – {exp.company}<br />
+        <small>{exp.duration}</small>
+        <p>{exp.description}</p>
+      </div>
+    ))}
+  </>
+)}
 
-      {resume.experience && (
-        <>
-          <h5 className="mt-4 text-primary">Experience</h5>
-          <p>{resume.experience}</p>
-        </>
-      )}
-
+     {/*Skills */}
       {resume.skills && resume.skills.length > 0 && (
         <>
           <h5 className="mt-4 text-primary">Skills</h5>

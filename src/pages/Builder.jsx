@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ResumePreview from "../components/ResumePreview";
 
-function Builder() {
+ function Builder() {
   const [template, setTemplate] = useState("classic"); // ✅ FIXED
 
   const [resume, setResume] = useState({
@@ -9,8 +9,13 @@ function Builder() {
     email: "",
     phone: "",
     summary: "",
-    education: "",
-    experience: "",
+    education: [
+     { degree: "", institute: "", year: "" }
+    ],
+    experience: [
+     { company: "", role: "", duration: "", description: "" }
+    ],
+
     skills: []
   });
 
@@ -58,25 +63,136 @@ function Builder() {
             }
           />
 
-          <input
-            className="form-control mb-3"
-            placeholder="Education"
-            value={resume.education}
-            onChange={(e) =>
-              setResume({ ...resume, education: e.target.value })
-            }
-          />
+    <h5 className="mt-4">Education</h5>
 
-          <textarea
-            className="form-control mb-3"
-            placeholder="Experience"
-            rows="3"
-            value={resume.experience}
-            onChange={(e) =>
-              setResume({ ...resume, experience: e.target.value })
-            }
-          />
+    {resume.education.map((edu, index) => (
+         <div key={index} className="border p-2 mb-3 rounded">
 
+    <input
+      className="form-control mb-2"
+      placeholder="Degree"
+      value={edu.degree}
+      onChange={(e) => {
+        const newEdu = [...resume.education];
+        newEdu[index].degree = e.target.value;
+        setResume({ ...resume, education: newEdu });
+      }}
+    />
+
+    <input
+      className="form-control mb-2"
+      placeholder="Institute"
+      value={edu.institute}
+      onChange={(e) => {
+        const newEdu = [...resume.education];
+        newEdu[index].institute = e.target.value;
+        setResume({ ...resume, education: newEdu });
+      }}
+    />
+
+    <input
+      className="form-control mb-2"
+      placeholder="Year"
+      value={edu.year}
+      onChange={(e) => {
+        const newEdu = [...resume.education];
+        newEdu[index].year = e.target.value;
+        setResume({ ...resume, education: newEdu });
+      }}
+    />
+
+  </div>
+))}
+
+<button
+  className="btn btn-sm btn-outline-primary"
+  onClick={() =>
+    setResume({
+      ...resume,
+      education: [
+        ...resume.education,
+        { degree: "", institute: "", year: "" }
+      ]
+    })
+  }
+>
+  + Add Education
+</button>
+
+
+        <h5 className="mt-4">Experience</h5>
+
+   {resume.experience.map((exp, index) => (
+     <div key={index} className="border p-2 mb-3 rounded">
+ 
+    <input
+      className="form-control mb-2"
+      placeholder="Company"
+      value={exp.company}
+      onChange={(e) => {
+        const newExp = [...resume.experience];
+        newExp[index].company = e.target.value;
+        setResume({ ...resume, experience: newExp });
+      }}
+    />
+
+    <input
+      className="form-control mb-2"
+      placeholder="Role"
+      value={exp.role}
+      onChange={(e) => {
+        const newExp = [...resume.experience];
+        newExp[index].role = e.target.value;
+        setResume({ ...resume, experience: newExp });
+      }}
+    />
+
+    <input
+      className="form-control mb-2"
+      placeholder="Duration (e.g. 2023–2024)"
+      value={exp.duration}
+      onChange={(e) => {
+        const newExp = [...resume.experience];
+        newExp[index].duration = e.target.value;
+        setResume({ ...resume, experience: newExp });
+      }}
+    />
+
+    <textarea
+      className="form-control"
+      placeholder="Description"
+      value={exp.description}
+      onChange={(e) => {
+        const newExp = [...resume.experience];
+        newExp[index].description = e.target.value;
+        setResume({ ...resume, experience: newExp });
+      }}
+    />
+
+  </div>
+))}
+
+<button
+  className="btn btn-sm btn-outline-primary"
+  onClick={() =>
+    setResume({
+      ...resume,
+      experience: [
+        ...resume.experience,
+        {
+          company: "",
+          role: "",
+          duration: "",
+          description: ""
+        }
+      ]
+    })
+  }
+>
+  + Add Experience
+</button>
+
+    <h5 className="mt-4">Skills</h5>
           <input
             className="form-control mb-3"
             placeholder="Add skill & press Enter"
