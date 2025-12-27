@@ -1,38 +1,80 @@
-.App {
-  text-align: center;
+/* Default (Light mode) */
+body {
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Dark mode wrapper */
+.dark-mode {
+  background-color: #121212;
+  color: #eaeaea;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Builder page */
+.dark-mode .builder-container {
+  background-color: #1e1e1e;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* Resume preview */
+.dark-mode .resume-preview {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+/* Inputs */
+.dark-mode input,
+.dark-mode textarea {
+  background-color: #2a2a2a;
   color: white;
+  border: 1px solid #444;
 }
 
-.App-link {
-  color: #61dafb;
+/* Buttons */
+.dark-mode .btn-primary {
+  background-color: #0d6efd;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Dark mode inputs */
+.dark-mode input,
+.dark-mode textarea,
+.dark-mode select {
+  background-color: #2a2a2a;
+  color: #ffffff;           /* 👈 TEXT COLOR */
+  border: 1px solid #444;
+}
+
+/* Placeholder text */
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+  color: #aaaaaa;           /* 👈 PLACEHOLDER */
+}
+
+/* On focus */
+.dark-mode input:focus,
+.dark-mode textarea:focus,
+.dark-mode select:focus {
+  background-color: #2a2a2a;
+  color: #ffffff;
+  border-color: #0d6efd;
+  box-shadow: none;
+}
+
+.dark-mode .contact-info {
+  color: #bdbdbd;
+  opacity: 0.95;
+}
+
+/* Always light resume for PDF */
+.force-light,
+.force-light * {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #dddddd !important;
+}
+
+/* Links & highlights */
+.force-light h1,
+.force-light h2,
+.force-light h3 {
+  color: #000000 !important;
 }

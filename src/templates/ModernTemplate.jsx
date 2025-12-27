@@ -5,14 +5,14 @@ function ModernTemplate({ resume }) {
         {resume.name || "Your Name"}
       </h2>
 
-      <p className="text-muted">
-        {resume.email} | {resume.phone}
+      <p className="contact-info">
+        {resume.email} | {resume.phone} | {resume.address}
       </p>
 
       {/*Summary*/}
       {resume.summary && (
         <>
-          <h5 className="mt-4 text-primary">Summary</h5>
+          <h5 className="mt-4 text-primary">Objective</h5>
           <p>{resume.summary}</p>
         </>
       )}

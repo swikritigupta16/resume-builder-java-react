@@ -1,17 +1,23 @@
 import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
 function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="container text-center mt-5">
-      <h1>Resume Builder</h1>
-      <button
-        className="btn btn-primary mt-3"
-        onClick={() => navigate("/builder")}
-      >
-        Create Resume
-      </button>
+    <div className="home-container">
+      <div className="text-center">
+        <p className="text-light">
+          Create a professional resume in minutes
+        </p>
+
+        <button
+          className="btn btn-primary mt-3"
+          onClick={() => navigate("/builder")}
+        >
+          Create Resume
+        </button>
+      </div>
     </div>
   );
 }

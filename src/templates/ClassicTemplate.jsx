@@ -6,12 +6,14 @@ function ClassicTemplate({ resume }) {
         {resume.name || "Your Name"}
       </h2>
       <p className="mb-1">{resume.email}</p>
-      <p className="mb-3">{resume.phone}</p>
+      <p className="mb-1">{resume.phone}</p>
+      <p className="mb-3">{resume.address}</p>
+
 
       {/* Professional Summary */}
       {resume.summary && (
         <>
-          <h5 className="mt-3">Professional Summary</h5>
+          <h5 className="mt-3">Objective</h5>
           <p className="mb-3">{resume.summary}</p>
         </>
       )}
@@ -30,7 +32,7 @@ function ClassicTemplate({ resume }) {
         <strong>{edu.degree}</strong><br />
         {edu.institute} | {edu.year}
       </div>
-    ))}
+    ))}  
   </>
 )}
 
