@@ -11,6 +11,7 @@ A frontend resume builder application that allows users to create, preview, cust
 - Resume form with live preview
 - Multiple resume templates
 - PDF download
+- Light/Dark Mode
   
 =======
 # Getting Started with Create React App
