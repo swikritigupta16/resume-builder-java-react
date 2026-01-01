@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ResumePreview from "../components/ResumePreview";
 import "../App.css";
-
 import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -19,15 +18,21 @@ import jsPDF from "jspdf";
     address : "",
     summary: "",
     education: [
-     { degree: "", institute: "", year: "" }
+     { degree: "", institute: "", year: "", grade: ""}
     ],
     experience: [
      { company: "", role: "", duration: "", description: "" }
     ],
+    skills: [],
+    projects: [
+      {title: "", technology: "", description: "" }
 
-    skills: []
+    ]
+   
+
   });
 
+  {/* PDF Download */}
   const downloadPDF = async () => {
   const element = resumeRef.current;
   const appRoot = document.querySelector(".dark-mode");
@@ -70,7 +75,7 @@ import jsPDF from "jspdf";
     
     <div className="container mt-4">
 
- {/* 🌙 DARK MODE TOGGLE — STEP 2 */}
+ {/* DARK MODE TOGGLE  */}
     <div className="d-flex justify-content-end mb-3">
       <button
         className="btn btn-sm btn-outline-secondary"
@@ -166,6 +171,17 @@ import jsPDF from "jspdf";
       onChange={(e) => {
         const newEdu = [...resume.education];
         newEdu[index].year = e.target.value;
+        setResume({ ...resume, education: newEdu });
+      }}
+    />
+
+    <input
+      className="form-control mb-2"
+      placeholder="Grade"
+      value={edu.grade}
+      onChange={(e) => {
+        const newEdu = [...resume.education];
+        newEdu[index].grade = e.target.value;
         setResume({ ...resume, education: newEdu });
       }}
     />
@@ -275,10 +291,73 @@ import jsPDF from "jspdf";
               }
             }}
           />
+
+      {/* Projects */}
+        <h5 className="mt-4">Projects</h5>
+
+   {resume.projects.map((proj, index) => (
+     <div key={index} className="border p-2 mb-3 rounded">
+ 
+    <input
+      className="form-control mb-2"
+      placeholder="Title"
+      value={proj.title}
+      onChange={(e) => {
+        const newProj  = [...resume.projects];
+        newProj[index].title = e.target.value;
+        setResume({ ...resume, projects: newProj });
+      }}
+    />
+
+    <input
+      className="form-control mb-2"
+      placeholder="Technology Used"
+      value={proj.technology}
+      onChange={(e) => {
+        const newProj = [...resume.projects];
+        newProj[index].technology = e.target.value;
+        setResume({ ...resume, projects: newProj });
+      }}
+    />
+
+    <textarea
+      className="form-control"
+      placeholder="Description"
+      value={proj.description}
+      onChange={(e) => {
+        const newProj = [...resume.projects];
+        newProj[index].description = e.target.value;
+        setResume({ ...resume, projects: newProj });
+      }}
+    />
+
+  </div>
+))}
+
+<button
+  className="btn btn-sm btn-outline-primary"
+  onClick={() =>
+    setResume({
+      ...resume,
+      projects: [
+        ...resume.projects,
+        {
+          title: "",
+          technology: "",
+          description: ""
+        }
+      ]
+    })
+  }
+>
+  + Add Project
+</button>
+
+
+
         </div>
 
-
-
+ 
 
         {/* PREVIEW SECTION */}
         <div className="col-md-6">

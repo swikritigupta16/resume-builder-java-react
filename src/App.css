@@ -21,13 +21,6 @@ body {
   color: #ffffff;
 }
 
-/* Inputs */
-.dark-mode input,
-.dark-mode textarea {
-  background-color: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
-}
 
 /* Buttons */
 .dark-mode .btn-primary {
@@ -39,14 +32,14 @@ body {
 .dark-mode textarea,
 .dark-mode select {
   background-color: #2a2a2a;
-  color: #ffffff;           /* 👈 TEXT COLOR */
+  color: #ffffff;           /*  TEXT COLOR */
   border: 1px solid #444;
 }
 
 /* Placeholder text */
 .dark-mode input::placeholder,
 .dark-mode textarea::placeholder {
-  color: #aaaaaa;           /* 👈 PLACEHOLDER */
+  color: #aaaaaa;           /*  PLACEHOLDER */
 }
 
 /* On focus */

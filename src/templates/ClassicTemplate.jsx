@@ -23,14 +23,15 @@ function ClassicTemplate({ resume }) {
       edu =>
         edu.degree ||
         edu.institute ||
-        edu.year
+        edu.year ||
+        edu.grade
 ) && (
   <>
     <h5 className="mt-3">Education</h5>
     {resume.education.map((edu, index) => (
       <div key={index} className="mb-2">
-        <strong>{edu.degree}</strong><br />
-        {edu.institute} | {edu.year}
+        <strong>{edu.degree} - Grade: {edu.grade} </strong><br />
+        {edu.institute} , {edu.year} 
       </div>
     ))}  
   </>
@@ -68,6 +69,28 @@ function ClassicTemplate({ resume }) {
           </ul>
         </>
       )}
+
+       {/*Projects */}
+     {resume.projects?.some(
+      proj =>
+        proj.title ||
+        proj.technology ||
+        proj.description
+) && (
+  <>
+    <h5 className="mt-3">Projects</h5>
+    {resume.projects.map((proj, index) => (
+      <div key={index} className="mb-3">
+        <strong>{proj.title}</strong> – {proj.technology}<br />
+        <p>{proj.description}</p>
+      </div>
+    ))}
+  </>
+)}
+
+
+ 
+
     </div>
   );
 }
