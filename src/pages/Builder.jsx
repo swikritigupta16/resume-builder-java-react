@@ -4,6 +4,7 @@ import "../App.css";
 import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import SectionReorder from "../components/SectionReorder";
 
 
  function Builder({ darkMode, setDarkMode }) {
@@ -16,6 +17,10 @@ import jsPDF from "jspdf";
     email: "",
     phone: "",
     address : "",
+    profiles: {
+      github: "",
+      linkedin: ""
+    },    
     summary: "",
     education: [
      { degree: "", institute: "", year: "", grade: ""}
@@ -26,44 +31,72 @@ import jsPDF from "jspdf";
     skills: [],
     projects: [
       {title: "", technology: "", description: "" }
-
-    ]
-   
-
+    ],
+    certifications: [
+    { name: "", organization: "", year: "" }
+]
   });
 
+{/* DND kit - Drag and drop state  */}
+const [sections, setSections] = useState([
+  "summary",
+  "education",
+  "experience",
+  "skills",
+  "projects",
+  "certifications"
+]);
+
+
+
   {/* PDF Download */}
+ 
   const downloadPDF = async () => {
   const element = resumeRef.current;
   const appRoot = document.querySelector(".dark-mode");
 
-  // 1️⃣ Temporarily disable dark mode
+  // 1️⃣ Temporarily disable dark mode (UI)
   if (appRoot) {
     appRoot.classList.remove("dark-mode");
   }
 
-  // 2️⃣ Force light resume
+  // 2️⃣ Force light styles only for resume
   element.classList.add("force-light");
 
-  // Small delay to apply styles
+  // Give browser time to apply styles
   await new Promise((resolve) => setTimeout(resolve, 200));
 
   const canvas = await html2canvas(element, {
     scale: 2,
     useCORS: true,
-    backgroundColor: "#ffffff"
+    backgroundColor: "#ffffff",
   });
 
   const imgData = canvas.toDataURL("image/png");
-
   const pdf = new jsPDF("p", "mm", "a4");
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  const imgHeight = (canvas.height * pageWidth) / canvas.width;
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  // 3️⃣ First page
+  pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
+  heightLeft -= pageHeight;
+
+  // 4️⃣ Extra pages (if resume is long)
+  while (heightLeft > 0) {
+    position -= pageHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
+    heightLeft -= pageHeight;
+  }
+
   pdf.save("Resume.pdf");
 
-  // 3️⃣ Restore dark mode
+  // 5️⃣ Restore UI state
   element.classList.remove("force-light");
   if (appRoot) {
     appRoot.classList.add("dark-mode");
@@ -71,6 +104,9 @@ import jsPDF from "jspdf";
 };
 
 
+
+
+{/* UI Rendering */}
   return (
     
     <div className="container mt-4">
@@ -88,8 +124,13 @@ import jsPDF from "jspdf";
       <div className="row">
 
         {/* FORM SECTION */}
-        <div className="col-md-6">
 
+       <div
+  className="col-md-6 overflow-auto"
+  style={{ height: "100vh" }}
+>
+
+{/* Basic Details */} 
           <input
             className="form-control mb-3"
             placeholder="Full Name"
@@ -127,9 +168,45 @@ import jsPDF from "jspdf";
             }
           />
 
+{/*Profiles */}
+       <h5 className="mt-4">Profiles</h5>
+
+<input
+  className="form-control mb-2"
+  placeholder="GitHub Profile URL"
+  value={resume.profiles.github}
+  onChange={(e) =>
+    setResume({
+      ...resume,
+      profiles: {
+        ...resume.profiles,
+        github: e.target.value
+      }
+    })
+  }
+/>
+
+<input
+  className="form-control"
+  placeholder="LinkedIn Profile URL"
+  value={resume.profiles.linkedin}
+  onChange={(e) =>
+    setResume({
+      ...resume,
+      profiles: {
+        ...resume.profiles,
+        linkedin: e.target.value
+      }
+    })
+  }
+/>
+
+
+{/* Summary */}
+     <h5 className = "mt-5">Professional Summary</h5>
           <textarea
             className="form-control mb-3"
-            placeholder="Objective"
+            placeholder="Summary"
             rows="3"
             value={resume.summary}
             onChange={(e) =>
@@ -137,6 +214,7 @@ import jsPDF from "jspdf";
             }
           />
 
+{/*Education */}
     <h5 className="mt-4">Education</h5>
 
     {resume.education.map((edu, index) => (
@@ -204,7 +282,7 @@ import jsPDF from "jspdf";
   + Add Education
 </button>
 
-
+{/* Experience */}
         <h5 className="mt-4">Experience</h5>
 
    {resume.experience.map((exp, index) => (
@@ -277,6 +355,7 @@ import jsPDF from "jspdf";
   + Add Experience
 </button>
 
+ {/*Skills */}
     <h5 className="mt-4">Skills</h5>
           <input
             className="form-control mb-3"
@@ -292,7 +371,7 @@ import jsPDF from "jspdf";
             }}
           />
 
-      {/* Projects */}
+ {/* Projects */}
         <h5 className="mt-4">Projects</h5>
 
    {resume.projects.map((proj, index) => (
@@ -353,14 +432,78 @@ import jsPDF from "jspdf";
   + Add Project
 </button>
 
+{/* Certifications & Achievements*/}
+<h5 className="mt-4">Certifications & Achievements</h5>
 
+{resume.certifications.map((cert, index) => (
+  <div key={index} className="border p-2 mb-3 rounded">
+
+    <input
+      className="form-control mb-2"
+      placeholder="Certification Name"
+      value={cert.name}
+      onChange={(e) => {
+        const newCerts = [...resume.certifications];
+        newCerts[index].name = e.target.value;
+        setResume({ ...resume, certifications: newCerts });
+      }}
+    />
+
+    <input
+      className="form-control mb-2"
+      placeholder="Issuing Organization"
+      value={cert.organization}
+      onChange={(e) => {
+        const newCerts = [...resume.certifications];
+        newCerts[index].organization = e.target.value;
+        setResume({ ...resume, certifications: newCerts });
+      }}
+    />
+
+    <input
+      className="form-control"
+      placeholder="Year (optional)"
+      value={cert.year}
+      onChange={(e) => {
+        const newCerts = [...resume.certifications];
+        newCerts[index].year = e.target.value;
+        setResume({ ...resume, certifications: newCerts });
+      }}
+    />
+
+  </div>
+))}
+
+<button
+  className="btn btn-sm btn-outline-primary"
+  onClick={() =>
+    setResume({
+      ...resume,
+      certifications: [
+        ...resume.certifications,
+        { name: "", organization: "", year: "" }
+      ]
+    })
+  }
+>
+  + Add Certification
+</button>
+
+<h5 className="mt-3">Reorder Sections</h5>
+
+<SectionReorder
+  sections={sections}
+  setSections={setSections}
+/>
 
         </div>
 
  
 
-        {/* PREVIEW SECTION */}
+  {/* PREVIEW SECTION */}
         <div className="col-md-6">
+  <div className="preview-sticky">
+
 
   <select
     className="form-select mb-3"
@@ -369,10 +512,12 @@ import jsPDF from "jspdf";
   >
     <option value="classic">Classic Template</option>
     <option value="modern">Modern Template</option>
+    <option value="two-column">Two Column Template</option>
+
   </select>
 
   <div ref={resumeRef}>
-    <ResumePreview resume={resume} template={template} />
+    <ResumePreview resume={resume} template={template} sections={sections}/>
   </div>
 
   <button
@@ -382,6 +527,7 @@ import jsPDF from "jspdf";
     Download Resume as PDF
   </button>
 
+</div>
 </div>
 </div>
 </div>
