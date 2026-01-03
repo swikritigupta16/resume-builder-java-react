@@ -1,11 +1,9 @@
 .home-container {
-  min-height: 100vh;
+  min-height: 100svh; /* ✅ mobile-safe viewport height */
 
-  /* Overlay + background image */
-  background: linear-gradient(
-      rgba(0, 0, 0, 0.55),
-      rgba(0, 0, 0, 0.55)
-    ),
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.55),
+                    rgba(0, 0, 0, 0.55)),
     url("../assets/bg.png");
 
   background-size: cover;
@@ -15,4 +13,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  overflow: hidden; /* 🚫 no scroll */
 }

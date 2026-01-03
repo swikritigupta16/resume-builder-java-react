@@ -502,14 +502,19 @@ const [sections, setSections] = useState([
 
   {/* PREVIEW SECTION */}
         <div className="col-md-6">
-  <div className="preview-sticky">
+      <div className="preview-sticky">
 
+  {/* ✅ HEADING */}
+    <h5 className="fw-semibold mb-1 text-dark">
+      Select Resume Template:
+    </h5>
 
   <select
-    className="form-select mb-3"
+    className="form-select mb-4"
     value={template}
     onChange={(e) => setTemplate(e.target.value)}
   >
+    
     <option value="classic">Classic Template</option>
     <option value="modern">Modern Template</option>
     <option value="two-column">Two Column Template</option>
