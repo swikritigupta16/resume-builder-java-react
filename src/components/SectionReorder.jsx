@@ -1,29 +1,35 @@
 import {
   DndContext,
-  closestCenter
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 
 import {
   SortableContext,
   verticalListSortingStrategy,
-  useSortable
+  useSortable,
+  arrayMove,
 } from "@dnd-kit/sortable";
 
 import { CSS } from "@dnd-kit/utilities";
 
+/* ---------- SORTABLE ITEM ---------- */
 function SortableItem({ id }) {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
-    transition
+    transition,
   } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    cursor: "grab"
+    cursor: "grab",
   };
 
   return (
@@ -32,33 +38,47 @@ function SortableItem({ id }) {
       style={style}
       {...attributes}
       {...listeners}
-      className="list-group-item"
+      className="list-group-item d-flex justify-content-between align-items-center"
     >
       {id.toUpperCase()}
+      <span className="text-muted">☰</span>
     </li>
   );
 }
 
+/* ---------- MAIN COMPONENT ---------- */
 export default function SectionReorder({ sections, setSections }) {
+  /* ✅ Sensors (DESKTOP + MOBILE) */
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 5,
+      },
+    })
+  );
+
+  /* ✅ Drag End Handler */
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    setSections((prev) => {
+      const oldIndex = prev.indexOf(active.id);
+      const newIndex = prev.indexOf(over.id);
+      return arrayMove(prev, oldIndex, newIndex);
+    });
+  };
+
   return (
     <DndContext
+      sensors={sensors}
       collisionDetection={closestCenter}
-      onDragEnd={(event) => {
-        const { active, over } = event;
-
-        if (over && active.id !== over.id) {
-          setSections((items) => {
-            const oldIndex = items.indexOf(active.id);
-            const newIndex = items.indexOf(over.id);
-
-            const updated = [...items];
-            const [moved] = updated.splice(oldIndex, 1);
-            updated.splice(newIndex, 0, moved);
-
-            return updated;
-          });
-        }
-      }}
+      onDragEnd={handleDragEnd}
     >
       <SortableContext
         items={sections}
